@@ -1,0 +1,8 @@
+<!-- BEGIN_INCLUDE(mlogger:log) -->
+    <mlogger:log level="INFO" message="Optional message" doc:name="Logging">
+        <mlogger:entry>
+            <mlogger:entry key="query" value-ref="#[message.inboundProperties['http.query.params']['query']]" />
+            <mlogger:entry key="payload" value-ref="#[payload]" />
+        </mlogger:entry>
+    </mlogger:log>
+<!-- END_INCLUDE(mlogger:log) -->
