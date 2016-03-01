@@ -7,6 +7,7 @@ import org.apache.logging.log4j.core.config.plugins.validation.constraints.Requi
 import org.mule.api.MuleEvent;
 import org.mule.api.annotations.Connector;
 import org.mule.api.annotations.Processor;
+import org.mule.api.annotations.display.UserDefinedMetaData;
 import org.mule.api.annotations.param.Default;
 import org.mule.api.annotations.param.Payload;
 import org.mule.api.annotations.param.Optional;
@@ -14,23 +15,22 @@ import org.mule.api.annotations.param.Optional;
 @Connector(name="mplog", friendlyName="Mplog", schemaVersion = "1.0")
 public class MplogConnector {
 
-	private Logger logger = Logger.getLogger(MplogConnector.class);
+    private Logger logger = Logger.getLogger(MplogConnector.class);
 
-	@Processor
-	public String log(
-			@Required String level,
-			@Default("") String message,
-			MuleEvent muleEvent,
-			@Payload String payload,
-			@Optional Map<String, String> entry) throws Exception {
+    @Processor
+    @UserDefinedMetaData
+    public void log(MuleEvent muleEvent,
+                    @Required String level,
+                    @Optional String message,
+                    @Optional Map<String, String> entry) throws Exception {
 
-		LogMessageBuilder builder = new LogMessageBuilder();	
+        LogMessageBuilder builder = new LogMessageBuilder();
 
-		if (message != null && !message.isEmpty()) {
-			builder.addText(message);
-		}
+        if (message != null && !message.isEmpty()) {
+            builder.addText(message);
+        }
 
-		builder.addPair("message_id", muleEvent.getMessage().getUniqueId());
+        builder.addPair("message_id", muleEvent.getMessage().getUniqueId());
 
         if ( entry != null ) {
             for (Map.Entry<String, String> e : entry.entrySet()) {
@@ -38,23 +38,21 @@ public class MplogConnector {
             }
         }
 
-		switch (level) {
-			case "DEBUG":
+        switch (level) {
+            case "DEBUG":
                 logger.debug(builder.build());
-				break;
-			case "INFO":
+                break;
+            case "INFO":
                 logger.info(builder.build());
-				break;
-			case "WARN":
+                break;
+            case "WARN":
                 logger.warn(builder.build());
-				break;
+                break;
             case "ERROR":
                 logger.error(builder.build());
                 break;
             default:
-            	throw new IllegalArgumentException("Log level can be BEBUG, INFO, WARN or ERROR, but \"" + level + "\" passed.");
-		}
-
-		return payload;
-	}
+                throw new IllegalArgumentException("Log level can be BEBUG, INFO, WARN or ERROR, but \"" + level + "\" passed.");
+        }
+    }
 }
