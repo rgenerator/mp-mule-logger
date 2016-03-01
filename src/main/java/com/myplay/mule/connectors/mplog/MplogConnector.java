@@ -9,6 +9,7 @@ import org.mule.api.annotations.Connector;
 import org.mule.api.annotations.Processor;
 import org.mule.api.annotations.param.Default;
 import org.mule.api.annotations.param.Payload;
+import org.mule.api.annotations.param.Optional;
 
 @Connector(name="mplog", friendlyName="Mplog", schemaVersion = "1.0")
 public class MplogConnector {
@@ -21,7 +22,7 @@ public class MplogConnector {
 			@Default("") String message,
 			MuleEvent muleEvent,
 			@Payload String payload,
-			Map<String, String> entry) throws Exception {
+			@Optional Map<String, String> entry) throws Exception {
 
 		LogMessageBuilder builder = new LogMessageBuilder();	
 
@@ -31,9 +32,11 @@ public class MplogConnector {
 
 		builder.addPair("message_id", muleEvent.getMessage().getUniqueId());
 
-		for (Map.Entry<String, String> e : entry.entrySet()) {
-			builder.addPair(e.getKey(), e.getValue());
-		}
+        if ( entry != null ) {
+            for (Map.Entry<String, String> e : entry.entrySet()) {
+                builder.addPair(e.getKey(), e.getValue());
+            }
+        }
 
 		switch (level) {
 			case "DEBUG":
