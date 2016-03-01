@@ -1,4 +1,4 @@
-package com.myplay.esb.connectors.mlogger;
+package com.myplay.mule.connectors.mplog;
 
 import java.util.Map;
 
@@ -10,10 +10,10 @@ import org.mule.api.annotations.Processor;
 import org.mule.api.annotations.param.Default;
 import org.mule.api.annotations.param.Payload;
 
-@Connector(name="mlogger", friendlyName="Mlogger", schemaVersion = "1.0")
-public class MloggerConnector {
+@Connector(name="mplog", friendlyName="Mplog", schemaVersion = "1.0")
+public class MplogConnector {
 
-	private Logger logger = Logger.getLogger(MloggerConnector.class);
+	private Logger logger = Logger.getLogger(MplogConnector.class);
 
 	@Processor
 	public String log(

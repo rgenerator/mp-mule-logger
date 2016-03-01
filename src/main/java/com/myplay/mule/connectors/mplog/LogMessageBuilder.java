@@ -1,4 +1,4 @@
-package com.myplay.esb.connectors.mlogger;
+package com.myplay.mule.connectors.mplog;
 
 import java.util.ArrayList;
 import org.apache.commons.lang.StringUtils;

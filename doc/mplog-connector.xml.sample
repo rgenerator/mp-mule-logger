@@ -1,0 +1,8 @@
+<!-- BEGIN_INCLUDE(mplog:log) -->
+    <mplog:log level="INFO" message="Optional message" doc:name="Logging">
+        <mplog:entry>
+            <mplog:entry key="page_num" value-ref="#[message.inboundProperties['http.query.params']['page_num']]" />
+            <mplog:entry key="payload" value-ref="#[payload]" />
+        </mplog:entry>
+    </mplog:log>
+<!-- END_INCLUDE(mplog:log) -->
