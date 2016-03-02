@@ -2,8 +2,10 @@ package com.myplay.mule.connectors.mplog;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-import org.apache.logging.log4j.core.config.plugins.validation.constraints.Required;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Level;
+
 import org.mule.api.MuleEvent;
 import org.mule.api.annotations.Connector;
 import org.mule.api.annotations.Processor;
@@ -15,12 +17,12 @@ import org.mule.api.annotations.param.Optional;
 @Connector(name="mplog", friendlyName="Mplog", schemaVersion = "1.0")
 public class MplogConnector {
 
-    private Logger logger = Logger.getLogger(MplogConnector.class);
+    private Logger logger = LogManager.getLogger(MplogConnector.class);
 
     @Processor
     @UserDefinedMetaData
     public void log(MuleEvent muleEvent,
-                    @Required String level,
+                    String level,
                     @Optional String message,
                     @Optional Map<String, String> entry) throws Exception {
 
@@ -38,21 +40,12 @@ public class MplogConnector {
             }
         }
 
-        switch (level) {
-            case "DEBUG":
-                logger.debug(builder.build());
-                break;
-            case "INFO":
-                logger.info(builder.build());
-                break;
-            case "WARN":
-                logger.warn(builder.build());
-                break;
-            case "ERROR":
-                logger.error(builder.build());
-                break;
-            default:
-                throw new IllegalArgumentException("Log level can be BEBUG, INFO, WARN or ERROR, but \"" + level + "\" passed.");
+        Level logLevel = Level.getLevel(level);
+
+        if (logLevel == null) {
+            throw new IllegalArgumentException("Illegal log level passed \"" + level + "\".");
         }
+
+        logger.log(logLevel, builder.build());
     }
 }
