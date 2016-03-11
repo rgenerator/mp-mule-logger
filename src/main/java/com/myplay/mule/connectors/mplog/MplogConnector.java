@@ -32,6 +32,7 @@ public class MplogConnector {
             builder.addText(message);
         }
 
+        builder.addPair("flow", muleEvent.getFlowConstruct().getName());
         builder.addPair("message_id", muleEvent.getMessage().getUniqueId());
 
         if ( entry != null ) {
